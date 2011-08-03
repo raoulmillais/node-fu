@@ -1,1 +1,1 @@
-readyjs readyjs.conf.js && node spec/specs.js
+readyjs readyjs.conf && node spec/specs.js
