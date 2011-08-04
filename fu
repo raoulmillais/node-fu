@@ -32,16 +32,29 @@ function env
 		echo "You need to have node installed to use fu - I can't help you with that :("; 
 		exit 1;
 	}
+	which ruby > /dev/null|| { 
+		# TODO: Check for ruby version 1.8.6+ or 1.9.1+
+		echo "You need to have ruby 1.8.6+ or 1.9.1+ installed to use fu - I can't help you with that :(";
+		exit 1;
+	}
+	which hub > /dev/null|| { 
+		echo "You need to have the hub github cli app installed to use fu - https://github.com/defunkt/hub";
+		exit 1;
+	}
 
-	# git config --global github.user
-	# git config --global github.email
-	# git config --global user.name
-	# git config --global user.email
-
-	# check github user and token exist
+	if ! git config --global github.user || \
+		! git config --global github.token || \
+		! git config --global user.name || \
+		! git config --global user.email ;
+	then
+		echo -e "You haven't configured your git for github correctly\n" \
+				"fu needs you to configure github username and token\n" \
+				"http://help.github.com/set-your-user-name-email-and-github-token/";
+		exit 1;
+	fi
 
 	# Install npm and packages as needed
-	which npm > /dev/null || { 
+	which npm > /dev/null || {
 		echo "Installing npm";
 		curl http://npmjs.org/install.sh | sh;
 	}
@@ -73,9 +86,13 @@ function project
 	# First argument is the path to the repo
 	REPO_PATH="$1"
 	SCRIPT_PATH="$(cd "$( dirname "$0" )" && pwd )"
+	GITHUB_USER="$(git config --global github.user)"
+	GIT_USER="$(git config --global user.name)"
+	GIT_EMAIL="$(git config --global user.email)"
+
 
 	# Trim trailing slashes
-	REPO_PATH=`echo "${REPO_PATH}" | sed -e "s/\/*$//" `
+	REPO_PATH=$(echo "${REPO_PATH}" | sed -e "s/\/*$//")
 	echo "Initialising project in ${REPO_PATH}"
 
 	if ! cd "$REPO_PATH" ;
@@ -98,12 +115,13 @@ function project
 	cp "${SCRIPT_PATH}"/readyjs.conf . || { echo "Failed to copy readyjs.conf"; exit 4; }
 
 	echo "Copying package.json"
-	cp "${SCRIPT_PATH}"/package.json || { echo "Failed to copy packaage.json"; exit 4; }
-	# TODO: Install project npm packages
-	npm link jezebel
+	cp "${SCRIPT_PATH}"/package.json . || { echo "Failed to copy package.json"; exit 4; }
 
 	# TODO: Copy version bump script
 	# TODO: Copy Makefile
+	# TODO: npm install it
+	${SCRIPT_PATH}/configure-package.js "${GITHUB_USER}" "${GIT_USER}" "${GIT_EMAIL}" "${SCRIPT_PATH}/package.json" || \
+	{ echo "Failed to configure package"; exit 5; }
 
 	exit 0;
 }
