@@ -6,28 +6,61 @@ set -u
 # Fail the script if any statement returns non true
 set -e
 
+# Debug all expansions
+# set -x
+
 function usage
 {
 	echo -e "fu - a commandline tool for setting up nodejs projects\n\n" \
-			"	setup - Verify dependencies and install necessary packages to setup fu for first use\n" \
-			"	init project-path/ - Initialise a new project in project-path\n";
+			"	env     - Setup your machine for development fu (first use)\n" \
+			"	project - path/ - Initialise a new project in project-path\n";
 }
 
-function setup
+function env 
 {
-	# Verify dependencies
-	which git || { echo "You need to have git installed to use fu"; exit 1; }
-	which node || { echo "You need to have node installed to use fu"; exit 1; }
-	which npm || { echo "You need to have npm installed to use fu"; exit 1; }
 
-	# TODO: Install global npm packages
-	# readyjs
-	# jezebel
+	[ "$(id -u)" = "0" ] || {
+		echo "Please setup your environment as root"
+		exit 1;
+	}
+
+	# Verify dependencies
+	which git > /dev/null || { 
+		echo "You need to have git installed to use fu - I can't help you with that :("; 
+		exit 1
+	}
+	which node > /dev/null|| { 
+		echo "You need to have node installed to use fu - I can't help you with that :("; 
+		exit 1;
+	}
+
+	# Install npm and packages as needed
+	which npm > /dev/null || { 
+		echo "Installing npm";
+		curl http://npmjs.org/install.sh | sh;
+	}
+
+	if ! npm ls -g --parseable | grep ready.js > /dev/null ;
+	then
+		echo "Installing ready.js";
+		npm install -f -g ready.js
+	fi
+
+	if ! npm ls -g --parseable | grep jezebel > /dev/null ;
+	then
+		echo "Installing jezebel";
+		npm install -f -g jezebel
+	fi
+
 	exit 0;
 }
 
-function init
+function project
 {
+	[ "$(id -u)" != "0" ] || {
+		echo "Please do not create projects as root"
+		exit 1;
+	}
 	# TODO: Verify fu setup has been run on this machine
 
 	# First argument is the path to the repo
@@ -36,11 +69,11 @@ function init
 
 	# Trim trailing slashes
 	REPO_PATH=`echo "${REPO_PATH}" | sed -e "s/\/*$//" `
-	echo "Initialising project in $REPO_PATH"
+	echo "Initialising project in ${REPO_PATH}"
 
 	if ! cd "$REPO_PATH" ;
 	then 
-		mkdir "$REPO_PATH" && cd "$REPO_PATH"
+		mkdir "${REPO_PATH}" && cd "${REPO_PATH}"
 		exit 1;
 	fi
 
@@ -52,12 +85,13 @@ function init
 	mkdir {lib,support,spec} || { echo "Failed to create project folder structure"; exit 3; }
 
 	echo "Copying pre-commit hook"
-	cp "$SCRIPT_PATH"/hooks/pre-commit .git/hooks || { echo "Failed to copy pre-commit hook"; exit 4; }
+	cp "${SCRIPT_PATH}"/hooks/pre-commit .git/hooks || { echo "Failed to copy pre-commit hook"; exit 4; }
 
 	echo "Copying readyjs config"
-	cp "$SCRIPT_PATH"/readyjs.conf . || { echo "Failed to copy pre-commit hook"; exit 4; }
+	cp "${SCRIPT_PATH}"/readyjs.conf . || { echo "Failed to copy pre-commit hook"; exit 4; }
 
 	# TODO: Install project npm packages
+	npm link jezebel
 
 	# TODO: Copy version bump script
 	# TODO: Copy Makefile
@@ -67,11 +101,11 @@ function init
 
 # Command parsing
 case "$1" in
-	"setup")
-		setup
+	"env")
+		env
 		;;
-	"init")
-		init $2
+	"project")
+		project $2
 		;;
 	*)
 		usage
