@@ -18,7 +18,6 @@ function usage
 
 function env 
 {
-
 	[ "$(id -u)" = "0" ] || {
 		echo "Please setup your environment as root"
 		exit 1;
@@ -33,6 +32,13 @@ function env
 		echo "You need to have node installed to use fu - I can't help you with that :("; 
 		exit 1;
 	}
+
+	# git config --global github.user
+	# git config --global github.email
+	# git config --global user.name
+	# git config --global user.email
+
+	# check github user and token exist
 
 	# Install npm and packages as needed
 	which npm > /dev/null || { 
@@ -61,6 +67,7 @@ function project
 		echo "Please do not create projects as root"
 		exit 1;
 	}
+
 	# TODO: Verify fu setup has been run on this machine
 
 	# First argument is the path to the repo
@@ -88,8 +95,10 @@ function project
 	cp "${SCRIPT_PATH}"/hooks/pre-commit .git/hooks || { echo "Failed to copy pre-commit hook"; exit 4; }
 
 	echo "Copying readyjs config"
-	cp "${SCRIPT_PATH}"/readyjs.conf . || { echo "Failed to copy pre-commit hook"; exit 4; }
+	cp "${SCRIPT_PATH}"/readyjs.conf . || { echo "Failed to copy readyjs.conf"; exit 4; }
 
+	echo "Copying package.json"
+	cp "${SCRIPT_PATH}"/package.json || { echo "Failed to copy packaage.json"; exit 4; }
 	# TODO: Install project npm packages
 	npm link jezebel
 
