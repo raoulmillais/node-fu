@@ -115,24 +115,34 @@ function project
 	cp "${SCRIPT_PATH}"/readyjs.conf . || { echo "Failed to copy readyjs.conf"; exit 4; }
 
 	echo "Copying package.json"
-	cp "${SCRIPT_PATH}"/package.json . || { echo "Failed to copy package.json"; exit 4; }
+	cp "${SCRIPT_PATH}"/package.json . || { echo "Failed to copy package.json"; exit 5; }
 
-	# TODO: Copy version bump script
-	# TODO: Copy Makefile
-	# TODO: npm install it
+	echo "Copying bump-version.sh"
+	cp "${SCRIPT_PATH}"/bump-version.sh . || { echo "Failed to copy bump-version.sh"; exit 6; }
+
+	echo "Copying Makefile"
+	cp "${SCRIPT_PATH}"/Makefile . || { echo "Failed to copy Makefile"; exit 7; }
+
 	${SCRIPT_PATH}/configure-package.js "${GITHUB_USER}" "${GIT_USER}" "${GIT_EMAIL}" "${SCRIPT_PATH}/package.json" || \
 	{ echo "Failed to configure package"; exit 5; }
 
+	# TODO: npm install it
+
+	echo "Done creating your project";
 	exit 0;
 }
 
 # Command parsing
 case "$1" in
 	"env")
-		env
+		shift;
+		env "$@"
 		;;
 	"project")
-		project $2
+		# Remove the first arg
+		shift;
+		# Pass the remaining args
+		project "$@"
 		;;
 	*)
 		usage
