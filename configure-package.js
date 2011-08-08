@@ -1,38 +1,54 @@
 #! /usr/bin/env node
-/*
-TODO
-
-set name
-set homepage - git remote
-set repo url
-set keywords (array)
-set author - git config --global github.user  && git config --global user.name
-
-*/
 
 var fs = require('fs'),
+	Step = require('step'),
 	args = process.argv,
-	i, l;
+	i, l, projectName,
+	githubUsername, gitUser, gitEmail;
 
 args.shift(); // node
 args.shift(); // this script
 
-for (i = 0, l = args.length; i < l; i++) {
-	console.log(args[i]);
-}
-
-if (args.length != 4) {
-	throw new Error('Incorrect number of arguments, expected github username' +
+if (args.length != 5) {
+	throw new Error('Incorrect number of arguments, expected project name, github username' +
 					', git username, git email and path to package.json');
 }
 
-fs.readFile(args[3], function(err, data) {
-	var parsed;
+projectName = args[0];
+githubUsername = args[1];
+gitUser = args[2];
+gitEmail = args[3];
+
+console.log('Project Name: %s', projectName);
+console.log('Github Username: %s', githubUsername);
+console.log('Git User: %s', gitUser);
+console.log('Git Email: %s', gitEmail);
+console.log('Package file path: %s', args[4]);
+
+fs.readFile(args[4], function(err, data) {
+	var parsed,
+		packageFile = args[4],
+		modifiedPackageContents;
 
 	if(err) {
 		throw new Error(err);
 	}
 	
 	parsed = JSON.parse(data);
-	//parsed.name = 
+	parsed.name = projectName;
+	parsed.homepage.push('http://github.com/' + githubUsername + '/' + projectName);
+	parsed.repository.url = 'git://github.com/' + githubUsername + '/' + projectName + '.git';
+	parsed.author = gitUser + ' <' + gitEmail + '>';
+
+	modifiedPackageContents = JSON.stringify(parsed);
+	Step(
+		function openFile() {
+			console.log(packageFile);
+			fs.open(packageFile, 'w', this);
+		},
+		function writeFile(err, fd) {
+			fs.writeSync(fd, modifiedPackageContents, 0);
+			console.log('Customised package.json');
+		}
+	);
 });
