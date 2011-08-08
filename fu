@@ -123,7 +123,7 @@ function project
 	echo "Copying Makefile"
 	cp "${SCRIPT_PATH}"/Makefile . || { echo "Failed to copy Makefile"; exit 7; }
 
-	${SCRIPT_PATH}/configure-package.js "${REPO_PATH}" "${GITHUB_USER}" "${GIT_USER}" "${GIT_EMAIL}" "${SCRIPT_PATH}/package.json" || \
+	${SCRIPT_PATH}/configure-package.js "${REPO_PATH}" "${GITHUB_USER}" "${GIT_USER}" "${GIT_EMAIL}" "package.json" || \
 	{ echo "Failed to configure package"; exit 5; }
 
 	# TODO: npm install it
