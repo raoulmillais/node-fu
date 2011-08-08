@@ -40,7 +40,7 @@ fs.readFile(args[4], function(err, data) {
 	parsed.repository.url = 'git://github.com/' + githubUsername + '/' + projectName + '.git';
 	parsed.author = gitUser + ' <' + gitEmail + '>';
 
-	modifiedPackageContents = JSON.stringify(parsed);
+	modifiedPackageContents = JSON.stringify(parsed, null, '\t');
 	Step(
 		function openFile() {
 			console.log(packageFile);
