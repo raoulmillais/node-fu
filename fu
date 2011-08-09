@@ -105,7 +105,7 @@ function project
 	git init || { echo "Failed to initialise a repository in ${REPO_PATH}"; exit 2; }
 
 	echo "Creating project folder structure"
-	mkdir {lib,support,spec} || { echo "Failed to create project folder structure"; exit 3; }
+	mkdir {bin,lib,support,spec} || { echo "Failed to create project folder structure"; exit 3; }
 
 	echo "Copying pre-commit hook"
 	cp "${SCRIPT_PATH}"/hooks/pre-commit .git/hooks || { echo "Failed to copy pre-commit hook"; exit 4; }
