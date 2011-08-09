@@ -6,7 +6,7 @@ conventions to enable quick continuously tested and linted code:
 
 * Initialises a new git repo
 * ready.js for continuous linting and compiling
-* jessie and jezebel for continuous behaviour testing
+* jessie and jezebel for automated continuous behaviour testing with Jasmine
 * Prefilled npm package definition with necessary dependencies
 * Standard project structure (bin,lib,spec,support)
 * Makefile
@@ -27,7 +27,7 @@ Install
 
 Clone the repository and add it into your path in your bashrc 
 
-set PATH=$PATH:/path/to/fu/repo
+    set PATH=$PATH:/path/to/fu/repo
 
 Before you start
 ----------------
@@ -40,7 +40,7 @@ Example usage
 Sanity check your environment and install any missing dependencies (You must run
 this before you start creating projects):
 
-    fu env
+    sudo fu env
 
 Create a project called bar in the current working directory:
 
