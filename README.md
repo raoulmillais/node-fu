@@ -32,12 +32,17 @@ Example usage
 
 Sanity check your environment and install any missing dependencies (You must run
 this before you start creating projects):
+
     fu env
 
 Create a project called bar in the current working directory:
+
     fu project bar
 
 Create a project in the current working directory:
+
     fu project .
 
-Make sure you npm install any packages
+Make sure you install your project when you have created one:
+
+    npm install
