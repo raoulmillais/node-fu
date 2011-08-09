@@ -1,5 +1,5 @@
 Fu - An Opinionated Node.js Project Setup Script
-------------------------------------------------
+================================================
 
 Fu makes it quick and simple to setup a new node.js project.  It enforces a few
 conventions to enable quick continuously tested and linted code:
@@ -17,18 +17,18 @@ You can also use it on your existing projects and it will (cautiously) try to
 apply the structure on top.
 
 Caveat
-======
+------
 
 This is still very early days, I welcome any help testing and reporting bugs,
 but I can't be held responsible if this script casuses the apocolapyse!
 
 Before you start
-================
+----------------
 
 Make sure you have nodejs <= 0.5.0 installed and npm
 
 Example usage
-=============
+-------------
 
 Sanity check your environment and install any missing dependencies (You must run
 this before you start creating projects):
