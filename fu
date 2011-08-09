@@ -102,32 +102,67 @@ function project
 	fi
 
 	# CWD is now the project folder
-	echo "Initialising git repository"
-	git init || { echo "Failed to initialise a repository in ${REPO_PATH}"; exit 2; }
+	if [ -d .git ]
+	then
+		echo "${REPO_PATH} is already a git repository"
+	else
+		echo "Initialising git repository"
+		git init || { echo "Failed to initialise a repository in ${REPO_PATH}"; exit 2; }
+	fi
 
-	echo "Copying gitignore"
-	cp "${ASSETS_PATH}"/.gitignore .gitignore || { echo "Failed to copy gitignore"; exit 4; }
+	if [ -r .gitignore ]
+	then
+		echo "Found a gitignore: omitting"
+	else
+		echo "Copying gitignore"
+		cp "${ASSETS_PATH}"/.gitignore .gitignore || { echo "Failed to copy gitignore"; exit 4; }
+	fi
 
 	echo "Creating project folder structure"
-	mkdir {bin,lib,support,spec} || { echo "Failed to create project folder structure"; exit 3; }
+	mkdir -p {bin,lib,support,spec} || { echo "Failed to create project folder structure"; exit 3; }
 
-	echo "Copying pre-commit hook"
-	cp "${ASSETS_PATH}"/hooks/pre-commit .git/hooks || { echo "Failed to copy pre-commit hook"; exit 4; }
+	if [ -x .git/hooks/pre-commit ]
+	then
+		echo "Found a pre-commit hook: omitting"
+	else
+		echo "Copying pre-commit hook"
+		cp "${ASSETS_PATH}"/hooks/pre-commit .git/hooks || { echo "Failed to copy pre-commit hook"; exit 4; }
+	fi
 
-	echo "Copying readyjs config"
-	cp "${ASSETS_PATH}"/readyjs.conf . || { echo "Failed to copy readyjs.conf"; exit 4; }
+	if [ -r readyjs.conf ]
+	then
+		echo "Found a ready.js config file: omitting"
+	else
+		echo "Copying readyjs config"
+		cp "${ASSETS_PATH}"/readyjs.conf . || { echo "Failed to copy readyjs.conf"; exit 4; }
+	fi
+	
+	if [ -r package.json ]
+	then
+		echo "Found a package.json: omitting and not configuring"
+	else
+		echo "Copying package.json"
+		cp "${ASSETS_PATH}"/package.json . || { echo "Failed to copy package.json"; exit 5; }
+		${SCRIPT_PATH}/configure-package.js "${REPO_PATH}" "${GITHUB_USER}" "${GIT_USER}" "${GIT_EMAIL}" "package.json" || \
+		{ echo "Failed to configure package"; exit 5; }
+		
+	fi
 
-	echo "Copying package.json"
-	cp "${ASSETS_PATH}"/package.json . || { echo "Failed to copy package.json"; exit 5; }
+	if [ -x bump-version.sh ]
+	then
+		echo "Found a bump-version.sh script: omitting"
+	else
+		echo "Copying bump-version.sh"
+		cp "${ASSETS_PATH}"/bump-version.sh . || { echo "Failed to copy bump-version.sh"; exit 6; }
+	fi
 
-	echo "Copying bump-version.sh"
-	cp "${ASSETS_PATH}"/bump-version.sh . || { echo "Failed to copy bump-version.sh"; exit 6; }
-
-	echo "Copying Makefile"
-	cp "${ASSETS_PATH}"/Makefile . || { echo "Failed to copy Makefile"; exit 7; }
-
-	${SCRIPT_PATH}/configure-package.js "${REPO_PATH}" "${GITHUB_USER}" "${GIT_USER}" "${GIT_EMAIL}" "package.json" || \
-	{ echo "Failed to configure package"; exit 5; }
+	if [ -r Makefile ]
+	then
+		echo "Found a Makefile: omitting"
+	else
+		echo "Copying Makefile"
+		cp "${ASSETS_PATH}"/Makefile . || { echo "Failed to copy Makefile"; exit 7; }
+	fi
 
 	# npm install .
 
