@@ -22,6 +22,11 @@ Caveat
 This is still very early days, I welcome any help testing and reporting bugs,
 but I can't be held responsible if this script casuses the apocolapyse!
 
+Install
+-------
+
+Clone the repository into your path (e.g. ~/bin/ or /usr/local/bin)
+
 Before you start
 ----------------
 
