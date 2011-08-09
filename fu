@@ -155,7 +155,7 @@ function project
 	else
 		echo "Copying package.json"
 		cp "${ASSETS_PATH}"/package.json . || { echo "Failed to copy package.json"; exit 5; }
-		${SCRIPT_PATH}/configure-package.js "${REPO_PATH}" "${GITHUB_USER}" "${GIT_USER}" "${GIT_EMAIL}" "package.json" || \
+		${SCRIPT_PATH}/lib/configure-package.js "${REPO_PATH}" "${GITHUB_USER}" "${GIT_USER}" "${GIT_EMAIL}" "package.json" || \
 		{ echo "Failed to configure package"; exit 5; }
 		
 	fi
