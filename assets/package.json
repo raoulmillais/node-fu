@@ -19,7 +19,7 @@
 	"scripts": {
 		"test": "spec/specs.js"
 	},
-	"main": "main.js",
+	"main": "index.js",
 	"dependencies": {
 	},
 	"devDependencies": {
