@@ -43,6 +43,9 @@ Create a project in the current working directory:
 
     fu project .
 
+All the above can be used on exsting projects, if any of the files already exist
+fu should ignore then and leave then untouched.
+
 Make sure you install your project when you have created one:
 
     npm install
