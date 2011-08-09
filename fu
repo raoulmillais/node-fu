@@ -104,6 +104,8 @@ function project
 	echo "Initialising git repository"
 	git init || { echo "Failed to initialise a repository in ${REPO_PATH}"; exit 2; }
 
+	# TODO: Add a sensible gitignore
+
 	echo "Creating project folder structure"
 	mkdir {bin,lib,support,spec} || { echo "Failed to create project folder structure"; exit 3; }
 
