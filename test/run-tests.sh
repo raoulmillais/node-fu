@@ -13,9 +13,11 @@ after() {
 	rm -rf ../../test-project
 }
 
-it_creates_a_git_repo() {
+it_creates_a_git_repo_with_a_precommit_hook() {
 	status=$(git status > /dev/null ; echo $?)
 	test 0 -eq $status
+	test -x .git/hooks/pre-commit
+	test -r .gitignore
 }
 
 it_creates_the_project_structure() {
