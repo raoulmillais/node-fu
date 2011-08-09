@@ -88,9 +88,11 @@ function project
 	then
 		# Set the project name to the current folder name
 		REPO_PATH="${PWD##*/}"
+		PROJECT_NAME="${REPO_PATH}"
 		IS_PWD="yes"
 	else
 		REPO_PATH="$1"
+		PROJECT_NAME="${REPO_PATH##*/}"
 		IS_PWD="no"
 	fi
 	SCRIPT_PATH="$(cd "$( dirname "$0" )" && pwd )"
@@ -155,7 +157,7 @@ function project
 	else
 		echo "Copying package.json"
 		cp "${ASSETS_PATH}"/package.json . || { echo "Failed to copy package.json"; exit 5; }
-		${SCRIPT_PATH}/lib/configure-package.js "${REPO_PATH}" "${GITHUB_USER}" "${GIT_USER}" "${GIT_EMAIL}" "package.json" || \
+		${SCRIPT_PATH}/lib/configure-package.js "${PROJECT_NAME}" "${GITHUB_USER}" "${GIT_USER}" "${GIT_EMAIL}" "package.json" || \
 		{ echo "Failed to configure package"; exit 5; }
 		
 	fi
