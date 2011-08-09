@@ -127,7 +127,7 @@ function project
 	${SCRIPT_PATH}/configure-package.js "${REPO_PATH}" "${GITHUB_USER}" "${GIT_USER}" "${GIT_EMAIL}" "package.json" || \
 	{ echo "Failed to configure package"; exit 5; }
 
-	npm install .
+	# npm install .
 
 	echo "Done creating your project";
 	exit 0;
