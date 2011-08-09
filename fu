@@ -24,20 +24,20 @@ function env
 	}
 
 	# Verify dependencies
-	which git > /dev/null || { 
+	which git > /dev/null || {
 		echo "You need to have git installed to use fu - I can't help you with that :("; 
 		exit 1
 	}
-	which node > /dev/null|| { 
+	which node > /dev/null|| {
 		echo "You need to have node installed to use fu - I can't help you with that :("; 
 		exit 1;
 	}
-	which ruby > /dev/null|| { 
+	which ruby > /dev/null|| {
 		# TODO: Check for ruby version 1.8.6+ or 1.9.1+
 		echo "You need to have ruby 1.8.6+ or 1.9.1+ installed to use fu - I can't help you with that :(";
 		exit 1;
 	}
-	which hub > /dev/null|| { 
+	which hub > /dev/null|| {
 		echo "You need to have the hub github cli app installed to use fu - https://github.com/defunkt/hub";
 		exit 1;
 	}
