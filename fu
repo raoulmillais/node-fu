@@ -97,8 +97,7 @@ function project
 
 	if ! cd "$REPO_PATH" ;
 	then 
-		mkdir "${REPO_PATH}" && cd "${REPO_PATH}"
-		exit 1;
+		mkdir "${REPO_PATH}" || { echo "Failed to create project folder ${REPO_PATH}"; exit 1; }
 	fi
 
 	# CWD is now the project folder
