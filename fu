@@ -84,7 +84,15 @@ function project
 	# TODO: Verify fu setup has been run on this machine
 
 	# First argument is the path to the repo
-	REPO_PATH="$1"
+	if [ "$1" = "." ]
+	then
+		# Set the project name to the current folder name
+		REPO_PATH="${PWD##*/}"
+		IS_PWD="yes"
+	else
+		REPO_PATH="$1"
+		IS_PWD="no"
+	fi
 	SCRIPT_PATH="$(cd "$( dirname "$0" )" && pwd )"
 	ASSETS_PATH="${SCRIPT_PATH}"/assets
 	GITHUB_USER="$(git config --global github.user)"
@@ -96,9 +104,13 @@ function project
 	REPO_PATH=$(echo "${REPO_PATH}" | sed -e "s/\/*$//")
 	echo "Initialising project in ${REPO_PATH}"
 
-	if ! cd "$REPO_PATH" ;
-	then 
-		mkdir "${REPO_PATH}" || { echo "Failed to create project folder ${REPO_PATH}"; exit 1; }
+	if [ "${IS_PWD}" != "yes" ]
+	then
+		if ! cd "$REPO_PATH" ;
+		then 
+			mkdir "${REPO_PATH}" || { echo "Failed to create project folder ${REPO_PATH}"; exit 1; }
+			cd "${REPO_PATH}"
+		fi
 	fi
 
 	# CWD is now the project folder
