@@ -25,7 +25,9 @@ but I can't be held responsible if this script casuses the apocolapyse!
 Install
 -------
 
-Clone the repository into your path (e.g. ~/bin/ or /usr/local/bin)
+Clone the repository and add it into your path in your bashrc 
+
+set PATH=$PATH:/path/to/fu/repo
 
 Before you start
 ----------------
