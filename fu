@@ -86,6 +86,7 @@ function project
 	# First argument is the path to the repo
 	REPO_PATH="$1"
 	SCRIPT_PATH="$(cd "$( dirname "$0" )" && pwd )"
+	ASSETS_PATH="${SCRIPT_PATH}"/assets
 	GITHUB_USER="$(git config --global github.user)"
 	GIT_USER="$(git config --global user.name)"
 	GIT_EMAIL="$(git config --global user.email)"
@@ -105,25 +106,25 @@ function project
 	git init || { echo "Failed to initialise a repository in ${REPO_PATH}"; exit 2; }
 
 	echo "Copying gitignore"
-	cp "${SCRIPT_PATH}"/assets/.gitignore .gitignore || { echo "Failed to copy gitignore"; exit 4; }
+	cp "${ASSETS_PATH}"/.gitignore .gitignore || { echo "Failed to copy gitignore"; exit 4; }
 
 	echo "Creating project folder structure"
 	mkdir {bin,lib,support,spec} || { echo "Failed to create project folder structure"; exit 3; }
 
 	echo "Copying pre-commit hook"
-	cp "${SCRIPT_PATH}"/hooks/pre-commit .git/hooks || { echo "Failed to copy pre-commit hook"; exit 4; }
+	cp "${ASSETS_PATH}"/hooks/pre-commit .git/hooks || { echo "Failed to copy pre-commit hook"; exit 4; }
 
 	echo "Copying readyjs config"
-	cp "${SCRIPT_PATH}"/readyjs.conf . || { echo "Failed to copy readyjs.conf"; exit 4; }
+	cp "${ASSETS_PATH}"/readyjs.conf . || { echo "Failed to copy readyjs.conf"; exit 4; }
 
 	echo "Copying package.json"
-	cp "${SCRIPT_PATH}"/package.json . || { echo "Failed to copy package.json"; exit 5; }
+	cp "${ASSETS_PATH}"/package.json . || { echo "Failed to copy package.json"; exit 5; }
 
 	echo "Copying bump-version.sh"
-	cp "${SCRIPT_PATH}"/bump-version.sh . || { echo "Failed to copy bump-version.sh"; exit 6; }
+	cp "${ASSETS_PATH}"/bump-version.sh . || { echo "Failed to copy bump-version.sh"; exit 6; }
 
 	echo "Copying Makefile"
-	cp "${SCRIPT_PATH}"/Makefile . || { echo "Failed to copy Makefile"; exit 7; }
+	cp "${ASSETS_PATH}"/Makefile . || { echo "Failed to copy Makefile"; exit 7; }
 
 	${SCRIPT_PATH}/configure-package.js "${REPO_PATH}" "${GITHUB_USER}" "${GIT_USER}" "${GIT_EMAIL}" "package.json" || \
 	{ echo "Failed to configure package"; exit 5; }
