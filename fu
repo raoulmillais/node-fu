@@ -108,7 +108,7 @@ function project
 
 	if [ "${IS_PWD}" != "yes" ]
 	then
-		if ! cd "$REPO_PATH" ;
+		if ! cd "$REPO_PATH" > /dev/null ;
 		then 
 			mkdir "${REPO_PATH}" || { echo "Failed to create project folder ${REPO_PATH}"; exit 1; }
 			cd "${REPO_PATH}"
