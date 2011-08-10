@@ -169,14 +169,6 @@ function project
 		
 	fi
 
-	if [ -x bump-version.sh ]
-	then
-		echo "Found a bump-version.sh script: omitting"
-	else
-		echo "Copying bump-version.sh"
-		cp "${ASSETS_PATH}"/bump-version.sh . || { echo "Failed to copy bump-version.sh"; exit 6; }
-	fi
-
 	if [ -r Makefile ]
 	then
 		echo "Found a Makefile: omitting"

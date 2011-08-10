@@ -39,7 +39,4 @@ it_copies_a_makefile() {
 	test -r Makefile
 }
 
-it_copies_the_versioning_script() {
-	test -x bump-version.sh
-}
 
