@@ -42,10 +42,10 @@ function env
 		exit 1;
 	}
 
-	if ! git config --global github.user || \
-		! git config --global github.token || \
-		! git config --global user.name || \
-		! git config --global user.email ;
+	if ! git config --global github.user > /dev/null || \
+		! git config --global github.token > /dev/null || \
+		! git config --global user.name > /dev/null || \
+		! git config --global user.email > /dev/null ;
 	then
 		echo -e "You haven't configured your git for github correctly\n" \
 				"fu needs you to configure github username and token\n" \
@@ -71,6 +71,7 @@ function env
 		npm install -f -g jezebel
 	fi
 
+	echo "Done. fu is now ready for use"
 	exit 0;
 }
 
