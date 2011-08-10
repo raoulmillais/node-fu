@@ -65,6 +65,12 @@ function env
 		npm install -f -g ready.js
 	fi
 
+	if ! npm ls -g --parseable | grep jessie > /dev/null ;
+	then
+		echo "Installing jessie";
+		npm install -f -g jessie
+	fi
+
 	if ! npm ls -g --parseable | grep jezebel > /dev/null ;
 	then
 		echo "Installing jezebel";
