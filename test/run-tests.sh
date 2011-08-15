@@ -39,4 +39,7 @@ it_copies_a_makefile() {
 	test -r Makefile
 }
 
+it_copies_the_travis_config() {
+	test -r .travis.yml
+}
 

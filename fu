@@ -177,6 +177,13 @@ function project
 		cp "${ASSETS_PATH}"/Makefile . || { echo "Failed to copy Makefile"; exit 7; }
 	fi
 
+	if [ -r .travis.yml ]
+	then
+		echo "Found a travis config: omitting"
+	else
+		echo "Copying travis config"
+		cp "${ASSETS_PATH}"/.travis.yml . || { echo "Failed to copy travis config"; exit 7; }
+	fi
 	# npm install .
 
 	echo "Done creating your project";
