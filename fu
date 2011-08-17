@@ -77,6 +77,11 @@ function setup
 		npm install -f -g jezebel
 	fi
 
+	if ! npm ls -g --parseable | grep dox > /dev/null ;
+	then
+		echo "Installing dox";
+		npm install -f -g dox
+	fi
 	echo "Done. fu is now ready for use"
 	exit 0;
 }
