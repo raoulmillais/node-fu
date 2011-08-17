@@ -6,3 +6,4 @@ test: check
 check:
 	readyjs readyjs.conf.js
 
+.PHONY: check test
