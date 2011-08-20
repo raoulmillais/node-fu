@@ -162,7 +162,7 @@ function project
 		echo "Copying readyjs config"
 		cp "${ASSETS_PATH}"/readyjs.conf . || { echo "Failed to copy readyjs.conf"; exit 4; }
 	fi
-	
+
 	if [ -r package.json ]
 	then
 		echo "Found a package.json: omitting and not configuring"
@@ -187,12 +187,78 @@ function project
 		echo "Found a travis config: omitting"
 	else
 		echo "Copying travis config"
-		cp "${ASSETS_PATH}"/.travis.yml . || { echo "Failed to copy travis config"; exit 7; }
+		cp "${ASSETS_PATH}"/.travis.yml . || {
+			echo "Failed to copy travis config";
+			exit 7;
+		}
 	fi
 	# npm install .
 
-	echo "Done creating your project";
-	exit 0;
+}
+
+function webproject
+{
+	project "$@"
+
+	echo "Creating web project folder structure"
+	mkdir -p {client,public,views} || {
+		echo "Failed to create web project folder structure";
+		exit 3;
+	}
+
+	if [ -r server.js ]
+	then
+		echo "Found a server.js file: omitting"
+	else
+		echo "Copying server.js"
+		cp "${ASSETS_PATH}"/server.js . || {
+			echo "Failed to copy server.js";
+			exit 4;
+		}
+	fi
+
+	${SCRIPT_PATH}/lib/configure-package.js "${PROJECT_NAME}" \
+											"${GITHUB_USER}" \
+											"${GIT_USER}" \
+											"${GIT_EMAIL}" \
+											"package.json" \
+											"web" || {
+		echo "Failed to configure package";
+		exit 5;
+	}
+
+	if [ -r views/index.jade ]
+	then
+		echo "Found a index.jade file: omitting"
+	else
+		echo "Copying index.jade"
+		cp "${ASSETS_PATH}"/views/index.jade views/ || {
+			echo "Failed to copy index.jade";
+			exit 4;
+		}
+	fi
+
+	if [ -r views/layout.jade ]
+	then
+		echo "Found a layout.jade file: omitting"
+	else
+		echo "Copying layout.jade"
+		cp "${ASSETS_PATH}"/views/layout.jade views/ || {
+			echo "Failed to copy layout.jade";
+			exit 4;
+		}
+	fi
+
+	if [ -r client/index.js ]
+	then
+		echo "Found a client/index.js file: omitting"
+	else
+		echo "Copying layout.jade"
+		cp "${ASSETS_PATH}"/client/index.js client/ || {
+			echo "Failed to copy client/index.js";
+			exit 4;
+		}
+	fi
 }
 
 # Command parsing
@@ -206,6 +272,14 @@ case "$1" in
 		shift;
 		# Pass the remaining args
 		project "$@"
+		echo "Done creating your project";
+		exit 0;
+		;;
+	"webproject")
+		shift;
+		webproject "$@"
+		echo "Done creating your web project";
+		exit 0;
 		;;
 	*)
 		usage

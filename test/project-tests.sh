@@ -3,6 +3,7 @@
 describe "When creating projects in an existing folder"
 
 before() {
+	rm -rf ../../test-project
 	mkdir ../../test-project
 	../fu project ../../test-project/
 	cd ../../test-project
@@ -42,4 +43,3 @@ it_copies_a_makefile() {
 it_copies_the_travis_config() {
 	test -r .travis.yml
 }
-
